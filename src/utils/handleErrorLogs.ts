@@ -19,7 +19,6 @@ export const handleErrorLogs = async ({
   try {
     let postData: ErrorResponse = {
       u_id: globalRequestData?.u_id ?? "uknown",
-      org_id: globalRequestData?.org_id ?? "unknown",
       processInfo: `${config.node_env}:${config.port}`,
       errorSource,
       requestId: rTracer.id() as string,

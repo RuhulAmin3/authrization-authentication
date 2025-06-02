@@ -7,11 +7,7 @@ import parsePrismaValidationError from "../../errors/parsePrismaValidationError"
 import ApiError from "../../errors/ApiErrors";
 import { handleErrorLogs } from "../../utils/handleErrorLogs";
 import { generateErrSource } from "../../utils";
-
-// TODO
-const config = {
-  NODE_ENV: process.env.NODE_ENV || "development",
-};
+import config from "../../config";
 
 const GlobalErrorHandler = (
   err: any,
@@ -98,7 +94,7 @@ const GlobalErrorHandler = (
     message,
     errorSources,
     err,
-    stack: config.NODE_ENV === "development" ? err?.stack : null,
+    stack: config.node_env === "development" ? err?.stack : null,
   });
 };
 

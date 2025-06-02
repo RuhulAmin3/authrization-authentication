@@ -2,7 +2,6 @@ import type { StatusCodes } from "http-status-codes";
 
 export type ErrorResponse = {
   u_id: string;
-  org_id: string;
   requestId: string;
   processInfo: string;
   errorSource: string;

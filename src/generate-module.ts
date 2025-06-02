@@ -1,11 +1,6 @@
 import fs from "fs";
 import path from "path";
 
-// Capitalize the first letter of the module name
-function capitalize(text: string): string {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
-
 // Function to generate a comment based on the file name
 function getFileComment(fileName: string): string {
   const baseName = path.basename(fileName, path.extname(fileName)); // Get the name without extension
@@ -28,21 +23,13 @@ function getFileComment(fileName: string): string {
 
 // Main function to create module directory and files
 async function createModule(moduleName: string): Promise<void> {
-  const capitalizedModuleName = capitalize(moduleName);
-
   // Fix the base path to your project's root directory
   const projectRoot = path.resolve(__dirname, ".."); // Adjust this based on where your script is
-  const moduleDir = path.join(
-    projectRoot,
-    "src",
-    "app",
-    "modules",
-    capitalizedModuleName,
-  );
+  const moduleDir = path.join(projectRoot, "src", "app", "modules", moduleName);
 
   // Check if the module directory already exists
   if (fs.existsSync(moduleDir)) {
-    console.log(`Module "${capitalizedModuleName}" already exists.`);
+    console.log(`Module "${moduleName}" already exists.`);
     return;
   }
 
@@ -51,11 +38,11 @@ async function createModule(moduleName: string): Promise<void> {
 
   // Files to create in the new module folder
   const filesToCreate = [
-    `${capitalizedModuleName}.controller.ts`,
-    `${capitalizedModuleName}.service.ts`,
-    `${capitalizedModuleName}.routes.ts`,
-    `${capitalizedModuleName}.validation.ts`,
-    `${capitalizedModuleName}.interface.ts`,
+    `${moduleName}.controller.ts`,
+    `${moduleName}.service.ts`,
+    `${moduleName}.routes.ts`,
+    `${moduleName}.validation.ts`,
+    `${moduleName}.interface.ts`,
   ];
 
   // Create each file with a comment based on the file name
@@ -66,7 +53,7 @@ async function createModule(moduleName: string): Promise<void> {
   }
 
   console.log(
-    `Module "${capitalizedModuleName}" with commented files created successfully.`,
+    `Module "${moduleName}" with commented files created successfully.`,
   );
 }
 

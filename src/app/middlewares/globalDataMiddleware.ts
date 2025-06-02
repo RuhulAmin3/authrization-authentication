@@ -5,15 +5,11 @@ import { GlobalRequestData } from "../../interfaces/globalRequestData";
 
 export const globalDataMiddleware: RequestHandler = (req, _res, next) => {
   const headers = req.headers;
-  const fingerprint = headers["x-fingerprint"] as string;
-  const currentOrgId = headers["x-org-id"] as string;
   const bearerToken = headers["authorization"] as string;
   const token = bearerToken?.split(" ")[1];
 
   const globalRequestInfo: GlobalRequestData = {
     u_id: req.user?.id ?? null,
-    org_id: currentOrgId ?? null,
-    fingerprint,
     token,
     ip: req.ip === "::ffff:172.19.0.1" ? "38.125.204.206" : (req.ip ?? ""),
     requestId: rTracer.id() as string,
