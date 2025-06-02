@@ -5,8 +5,6 @@ import { ZodError } from "zod";
 import handleZodError from "../../errors/handleZodError";
 import parsePrismaValidationError from "../../errors/parsePrismaValidationError";
 import ApiError from "../../errors/ApiErrors";
-import { handleErrorLogs } from "../../utils/handleErrorLogs";
-import { generateErrSource } from "../../utils";
 import config from "../../config";
 
 const GlobalErrorHandler = (
@@ -18,7 +16,6 @@ const GlobalErrorHandler = (
   let statusCode: any = httpStatus.INTERNAL_SERVER_ERROR;
   let message = err.message || "Something went wrong!";
   let errorSources = [];
-  const errorDetails = err || null;
 
   // Handle Zod Validation Errors
   if (err instanceof ZodError) {
@@ -78,17 +75,6 @@ const GlobalErrorHandler = (
     message = "An unexpected error occurred!";
     errorSources.push("Unknown Error");
   }
-
-  handleErrorLogs({
-    error: err,
-    errorSource: generateErrSource(__dirname, GlobalErrorHandler.name),
-    additionalData: {
-      errorSources,
-      errorDetails,
-      statusCode,
-    },
-  });
-
   res.status(statusCode).json({
     success: false,
     message,

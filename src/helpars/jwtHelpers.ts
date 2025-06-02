@@ -1,7 +1,7 @@
 import jwt, { Secret } from "jsonwebtoken";
 import config from "../config";
 
-export const generateToken = (userId: string, remember: boolean) => {
+export const generateToken = (userId: string, remember: boolean = false) => {
   const token = jwt.sign({ userId }, config.jwt.jwt_secret as Secret, {
     expiresIn: remember
       ? (config.jwt.expires_remember as any)

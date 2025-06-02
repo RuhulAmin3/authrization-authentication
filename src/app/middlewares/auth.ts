@@ -1,15 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-
-import config from "../../config";
-import { JwtPayload, Secret } from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
 
 import httpStatus from "http-status";
-import ApiError from "../../errors/ApiErrors";
-import { jwtHelpers } from "../../helpars/jwtHelpers";
 import prisma from "../../shared/prisma";
-import { handleErrorLogs } from "../../utils/handleErrorLogs";
+import ApiError from "../../errors/ApiErrors";
 import { generateErrSource } from "../../utils";
-import { updateGlobalData } from "../../utils/asyncLocalStorage";
+import { jwtHelpers } from "../../helpars/jwtHelpers";
 
 const auth = (...roles: string[]) => {
   return async (
@@ -24,16 +20,13 @@ const auth = (...roles: string[]) => {
         throw new ApiError(httpStatus.UNAUTHORIZED, "You are not authorized!");
       }
 
-      const verifiedUser = jwtHelpers.verifyToken(
-        token,
-        config.jwt.jwt_secret as Secret,
-      );
+      const verifiedUser = jwtHelpers.verifyToken(token);
 
-      const { id } = verifiedUser;
+      const { userId } = verifiedUser;
 
       const user = await prisma.user.findUnique({
         where: {
-          id: id,
+          id: userId,
         },
       });
 
@@ -47,17 +40,8 @@ const auth = (...roles: string[]) => {
         throw new ApiError(httpStatus.FORBIDDEN, "Forbidden!");
       }
 
-      updateGlobalData({
-        u_id: verifiedUser.id,
-        user_email: verifiedUser.email,
-      });
-
       next();
     } catch (err) {
-      handleErrorLogs({
-        error: err,
-        errorSource: generateErrSource(__dirname, auth.name),
-      });
       next(err);
     }
   };

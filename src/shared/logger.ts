@@ -13,8 +13,6 @@ const logger: Logger = createLogger({
     json(),
   ),
 
-  defaultMeta: { service: "clarivo-server" },
-
   transports: [
     new transports.DailyRotateFile({
       filename: `${appRoot}/logs/error-%DATE%.log`,
